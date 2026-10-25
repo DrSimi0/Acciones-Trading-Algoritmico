@@ -61,7 +61,7 @@ class EventBacktestEngine:
             cached_sorted_dates: Cache opcional de fechas ordenadas.
         """
         rng = np.random.default_rng(random_seed)
-        portfolio = PortfolioManager(self.config.risk)
+        portfolio = PortfolioManager(self.config.risk, getattr(self.config, "leverage", None))
         threshold = drop_pct_threshold if drop_pct_threshold is not None else self.config.event.min_drop_pct
 
         # 1. Detectar candidatos en todas las acciones
@@ -234,7 +234,10 @@ class EventBacktestEngine:
                     continue
 
                 # Regla de riesgo: límites de concurrencia y disyuntor
-                if not portfolio.can_open_position(ticker):
+                current_total_equity = portfolio.get_portfolio_value(current_prices)
+                current_gross_val = sum(pos.shares * current_prices.get(t, pos.nominal_entry_price) for t, pos in portfolio.positions.items())
+
+                if not portfolio.can_open_position(ticker, current_total_equity, current_gross_val):
                     continue
 
                 # Cálculo de niveles de salida
@@ -248,12 +251,12 @@ class EventBacktestEngine:
                 stop_dist = min(atr_dist, max_pct_dist)
                 stop_p = open_t1 - stop_dist
 
-                # Dimensionamiento de posición (position sizing)
-                current_total_equity = portfolio.get_portfolio_value(current_prices)
+                # Dimensionamiento de posición (position sizing con Kelly / expectativa de trade)
                 shares = portfolio.calculate_position_size(
                     entry_price=open_t1,
                     stop_price=stop_p,
                     current_equity=current_total_equity,
+                    current_gross_pos_val=current_gross_val,
                 )
 
                 if shares <= 0:

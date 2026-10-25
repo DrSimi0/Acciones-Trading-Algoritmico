@@ -47,19 +47,32 @@ class EntryConfig:
 
 
 @dataclass(frozen=True)
+class LeverageConfig:
+    enabled: bool = True  # Activado en esta rama
+    max_gross_leverage: float = 2.5  # Hasta 2.5x apalancamiento bruto (250% del equity)
+    margin_interest_rate_annual: float = 0.065  # 6.5% interés anual por deuda de margen
+    maintenance_margin_pct: float = 0.25  # 25% de margen de mantenimiento mínimo
+    use_expectancy_kelly_sizing: bool = True  # Dimensionamiento dinámico por expectativa de cada trade
+    kelly_fraction: float = 0.50  # Criterio Half-Kelly
+    min_trade_history_for_kelly: int = 5  # Mínimo de trades para calcular expectativa
+    base_risk_pct: float = 0.02  # 2% de riesgo agresivo
+    max_risk_pct: float = 0.04   # 4% de riesgo máximo con alta expectativa
+
+
+@dataclass(frozen=True)
 class ExitConfig:
-    rebound_target_pct: float = 0.50  # 50% de recuperación de la caída de cierre a cierre (variante: 75%)
+    rebound_target_pct: float = 0.50  # 50% de recuperación rápida
     stop_atr_mult: float = 1.5  # -1.5 x ATR(14)
     stop_max_loss_pct: float = 0.08  # Máximo -8%
-    time_stop_days: int = 5  # Cierre del día 5 (variante: día 3)
+    time_stop_days: int = 2  # Cierre acelerado al día 2 para maximizar rendimiento/tiempo
 
 
 @dataclass(frozen=True)
 class RiskConfig:
-    risk_per_trade_pct: float = 0.01  # 1% del capital por operación
+    risk_per_trade_pct: float = 0.02  # 2% agresivo
     max_concurrent_positions: int = 5
-    max_gross_exposure_pct: float = 1.0  # 100% de exposición máxima (sin apalancamiento)
-    drawdown_circuit_breaker_pct: float = 0.15  # Pausa si drawdown acumulado > 15%
+    max_gross_exposure_pct: float = 2.5  # Hasta 250% con apalancamiento
+    drawdown_circuit_breaker_pct: float = 0.20  # Límite de DD adaptado a perfil agresivo
     initial_capital_usd: float = 100_000.0
 
 
@@ -91,4 +104,5 @@ class StrategyConfig:
     exit: ExitConfig = field(default_factory=ExitConfig)
     risk: RiskConfig = field(default_factory=RiskConfig)
     cost: CostConfig = field(default_factory=CostConfig)
+    leverage: LeverageConfig = field(default_factory=LeverageConfig)
     splits: DataSplitsConfig = field(default_factory=DataSplitsConfig)

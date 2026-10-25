@@ -71,3 +71,16 @@ class EquityCostModel:
             total_cost_usd=comm + slip_usd,
             effective_fill_price=eff_price,
         )
+
+    @staticmethod
+    def calculate_daily_margin_interest(
+        borrowed_amount_usd: float,
+        annual_rate: float = 0.065,
+    ) -> float:
+        """Calcula el costo diario por saldo deudor de margen (overnight margin interest).
+        
+        Formula: Deuda * (Tasa anual / 360 días bancarios).
+        """
+        if borrowed_amount_usd <= 0.0:
+            return 0.0
+        return float(borrowed_amount_usd * (annual_rate / 360.0))
