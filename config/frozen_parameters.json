@@ -1,0 +1,38 @@
+{
+    "protocol_version": "1.0.0",
+    "timestamp_utc": "2026-10-25T17:48:23.641208Z",
+    "frozen_parameters": {
+        "drop_pct_threshold": 0.1,
+        "rebound_target_pct": 0.5,
+        "time_stop_days": 3,
+        "stop_atr_mult": 1.5,
+        "stop_max_loss_pct": 0.08,
+        "entry_max_gap_down_additional_pct": 0.05,
+        "risk_per_trade_pct": 0.01,
+        "max_concurrent_positions": 5,
+        "max_gross_exposure_pct": 1.0,
+        "drawdown_circuit_breaker_pct": 0.15,
+        "slippage_bps_normal": 0.001,
+        "slippage_bps_event": 0.003,
+        "commission_per_share": 0.005
+    },
+    "in_sample_performance": {
+        "drop_pct_threshold": 0.1,
+        "rebound_target_pct": 0.5,
+        "time_stop_days": 3,
+        "in_sample_sharpe": 0.4229903633494362,
+        "in_sample_profit_factor": 1.4264518307129674,
+        "in_sample_trades": 107,
+        "deflated_sharpe_prob": 0.00714774267368731
+    },
+    "predefined_acceptance_criteria": {
+        "min_trades_oos": 35,
+        "min_trades_total": 150,
+        "min_profit_factor_oos": 1.3,
+        "min_fraction_positive_years": 0.7,
+        "max_sharpe_degradation_pct": 0.5,
+        "min_sharpe_target_oos": 0.2114951816747181,
+        "require_news_filter_superiority": true
+    },
+    "sha256_checksum": "e8145e66344951272fef888e0fe3b8c80dec4a94913912d4b75ffc5cf3b3a9d3"
+}

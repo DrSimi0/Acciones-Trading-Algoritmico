@@ -1,0 +1,9 @@
+{
+    "drop_pct_threshold": 0.1,
+    "rebound_target_pct": 0.5,
+    "time_stop_days": 3,
+    "in_sample_sharpe": 0.4229903633494362,
+    "in_sample_profit_factor": 1.4264518307129674,
+    "in_sample_trades": 107,
+    "deflated_sharpe_prob": 0.00714774267368731
+}
